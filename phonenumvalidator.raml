@@ -1,0 +1,70 @@
+#%RAML 1.0
+title: phoneNumValidator
+baseUri: http://apilayer.net/api
+securitySchemes:
+  # outh2:
+  #   type: OAuth 2.0
+  #   description: O auth 2.o
+  #   displayName: O auth 2.o
+  basic :
+    type: Basic Authentication
+    displayName: Basic Authentication
+    description: API only works with the basic authentication
+protocols: [HTTP]
+description: NumVerify offers a full-featured yet simple RESTful JSON API for national and international phone number validation and information lookup for a total of 232 countries around the world.
+documentation:
+  - title: NUM VERIFY API
+    content: Refer below doc for more information https://numverify.com/documentation
+
+types:
+  apiresponse:
+    properties:
+      valid: boolean
+      number: string
+      local_format: string
+      international_format: string
+      country_prefix: string
+      country_code: string
+      country_name: string
+      location: string
+      carrier: string
+      line_type: string
+
+/validate:
+  get:
+    # securedBy: [outh2]
+    queryParameters:
+      access_key: string
+      number: string
+      country_code: string
+      format: string
+    description: For validating the phone number
+    displayName: Validate Phone
+    protocols: [HTTP]
+    responses:
+      200:
+        body:
+          application/json:
+            type: apiresponse
+            example: !include example/example.raml
+              
+      400:
+        body:
+          aplication/json:
+            properties:
+              message: string
+            example:
+              {
+                message: "API key is invalid"
+              }
+      
+      403:
+        body:
+          application/json:
+            properties:
+              message: string
+            example:
+              {
+                message: "Resouce does not exist"
+              }
+
